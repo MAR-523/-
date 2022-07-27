@@ -165,7 +165,7 @@ def rho(n):
     if rho_mid in temp:
         print('前',n,'位相等,find x1:',x,' and x2:',x_sm3)
         return x,x_sm3
-    else:
+    else:  #进入循环，找“环”
         temp.append(rho_mid)#
         while True:
             rho_new=sm3(rho_sm3)
@@ -191,6 +191,6 @@ def func(n):
     print('前',n,'位相等,find x1:',x1,'and x2:',x2)
 
 t1=time.time()
-func(32)
+func(n) #需要满足前n位相等，并求出产生碰撞的两个数
 t2=time.time()
 print('耗时：',t2-t1)
