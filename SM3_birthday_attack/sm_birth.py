@@ -4,17 +4,17 @@ import time
 import string
 
 #SM3算法
-IV=['7380166f','4914b2b9','172442d7','da8a0600','a96f30bc','163138aa','e38dee4d','b0fb0e4e']
+iv_1='7380166f4914b2b9172442d7da8a0600a96f30bc163138aae38dee4db0fb0e4e'
 T_all=['79cc4519','7a879d8a']
 
 
-def str2byte(m): #str转换成byte数组
+def str2byte(m): #str转换成byte数组的int值
     m_mid=len(m)
     m_byte=[]
     m_bytearray=m.encode('utf-8')
     for i in range(m_mid):
         m_byte.append(m_bytearray[i])
-    return m_byte
+    return int(m_byte[0])
 
 def FF(x,y,z,j):
     if j<=15:
@@ -40,34 +40,39 @@ def P0(x):
 def P1(x):    
     return x^leftmov(x,15)^leftmov(x,23)
     
+
 #消息填充
+def msgcut(msg,mem):  #数据按间距分组划分iv向量
+    lenth=len(msg)
+    num=int(lenth/mem)
+    tool_ary=[]
+    for i in range(num):
+        tool_ary.append(msg[i*mem:mem+i*mem])
+    return tool_ary
+
 def msgpop(m):
     m=str(m) #输入的内容作为str
     lenth=len(m)
-    l=lenth*8
-    m_midarray=str2byte(m)
-    m_midarray.append(128) #1000 0000=128
-    need0=64-lenth-1-8
-    for i in range(need0):
-        m_midarray.append(0)
-    arr_len=len(m_midarray)
-    string=""
-    for j in range(arr_len):
-        string+=bin(m_midarray[j]).replace('0b','').zfill(8)
-    add_len=bin(l).replace('0b','').zfill(64)
-    string+=add_len
-    return string
+    mid_msg=""
+    for i in range(lenth):
+        mid_msg+=bin(str2byte(m[i])).replace('0b','').zfill(8)
+    l_msg=len(mid_msg)
+    k=512-(64+(l_msg+1))%512
+    msg=mid_msg+'1'+k*'0'
+    add_len=bin(l_msg).replace('0b','').zfill(64)
+    msg=msg+add_len
+    msg=msgcut(msg,512)
+    return msg
 
 #消息扩展和迭代压缩
-def msgexpd(m):
-    B1=[]
+def msgexpd(IV,m):
+    B1=msgcut(m, 32)
     B2=[]
     T=[]
     T.append(int(T_all[0],16))
     T.append(int(T_all[1],16))
     for i in range(16):
-        mid_str=m[32*i:32+32*i]
-        B1.append(int(mid_str,2)) 
+        B1[i]=int(B1[i],2)
     for j in range(16,68):
         num=B1[j-16]^B1[j-9]^leftmov(B1[j-3],15)
         mid=P1(num)
@@ -76,8 +81,9 @@ def msgexpd(m):
     for k in range(64):
         mid=B1[k]^B1[k+4]
         B2.append(mid)
-    #return B1,B2 B1是W,B2是W'
-    #print(B1,B2)
+        
+    #B1是W,B2是W'
+    #print(B1,'***********',B2)
     iv=[]
     for i in range(8):
         iv.append(int(IV[i],16))
@@ -121,19 +127,32 @@ def msgexpd(m):
 
 def sm3(msg): #sm3整合
     mid1=msgpop(msg)
-    v_new=msgexpd(mid1)
-    final=""
-    miwen=""
-    for i in range(8):
-        final+=bin(v_new[i]).replace('0b','').zfill(32)
-    return final
-#256位的输出
+    n=len(mid1)
+    temp_IV=iv_1
+    for i in mid1:   
+        if i !='':
+            mid_IV=msgcut(temp_IV,8) #向量
+            temp_IV=msgexpd(mid_IV,i)
+            final=""
+            miwen=""
+            for k in range(8):
+                final+=bin(temp_IV[k]).replace('0b','').zfill(32)
+            for j in range(64):
+                mid_str=final[4*j:4+4*j]
+                mid_num=int(mid_str,2)
+                miwen+=hex(mid_num).replace('0x','')
+            temp_IV=miwen
+    out=""
+    for a in range(64):
+        out+=bin(int(temp_IV[a],16)).replace('0b','').zfill(4)      
+    return out  
 
+t1=time.time()
 
 #生日攻击
 def getlist(n,max_num):
     randlist=[]
-    while len(randlist1)<n:
+    while len(randlist)<n:
         x=random.randint(0,max_num)
         if x not in randlist:
             randlist.append(x)
@@ -141,8 +160,8 @@ def getlist(n,max_num):
 
 def birth(n):
     max_num=2**n
-    rand_num=int(max_num**0.25)
-    #rand_num=int(max_num**0.5)
+    rand_num=int(max_num**0.5)
+    #rand_num=2**n
 
     while True:
         lst1_val=[]
