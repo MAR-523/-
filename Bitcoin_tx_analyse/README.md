@@ -4,12 +4,12 @@
 在之后运行程序获得很多组钱包和私钥，这里选第一组  
 ![image](https://github.com/MAR-523/-/blob/main/pic/5.png)  
 可以通过[水龙头](https://testnet-faucet.mempool.co/) 免费获取测试比特币  
-可以在Electrum 工具处看到水龙头交易过来的比特币和对应的交易信息:  
-![image](https://github.com/MAR-523/-/blob/main/pic/2.png)  
+向我的另一个钱包**n1s9upzHJq99GRna363ASszLdErRDiF8Zz**交易比特币后可以看到txid:  
+![image](https://github.com/MAR-523/-/blob/main/pic/2.png)
 同时通过[网站BLOCKCYPHER](https://live.blockcypher.com/btc-testnet/)通过txid可以查询交易细节：  
 ![image](https://github.com/MAR-523/-/blob/main/pic/3.png)  
 要求对**交易原始内容**进行分析，因此借助[Socain](https://chain.so/btc)输入txid后进行查询：  
-![image](https://github.com/MAR-523/-/blob/main/pic/6.png)  
+![image](https://github.com/MAR-523/-/blob/main/pic/4.png)  
 输出结果：  
 ```
 {  
@@ -78,3 +78,5 @@
   
 可以看到交易原始数据为**0200000000010122807229ba696dd59d7467843fbefcd774b0e28689581c1e216aaba1ad4953910000000000feffffff02a0860100000000001600140d9dee648845608bee224c6750efae2e2df4cd2dc711bd5d00000000160014fe93350faf5825fcf07c2545ca91d17df72768780247304402202e97e53ba7983624358cda92f491d7c4a876dafff3a844bc3104876a68b8267e02207ac8d18914835874965dd4755f91fb81bf684bc200e2a04859c7add04815e377012102321af3166192ad2aa2e89a1b7005760340c2ad1c914ba8adf94dfde7badb9a39e1e92200**  
 接下来对交易原始数据进行解码：  
+**02000000**交易的版本号（固定长度四字节，这里填充为四个字节的数据后倒序）  
+**
