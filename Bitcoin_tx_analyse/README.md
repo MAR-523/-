@@ -19,8 +19,8 @@
 **5235929eaa6f0f336caad4653c8561ace3ed0e99cb97a8714c4bb57a11d4b81c**UTXO  
 他这里是Little-Endian格式，实际上可以看到是这样的：  
 ![image](https://github.com/MAR-523/-/blob/main/pic/6.png)  
-**01000000**UTXO的索引 
-**6a**十六进制形式的解锁脚本的字节数
+**01000000**UTXO的索引   
+**6a**十六进制形式的解锁脚本的字节数  
 **47**将47个字节的数据压入栈中  
 **3044022011d906321c6c538a298ae46fe317bba97ad897814ec9102dd001e12628789e8f022042955ad619531432774388fac48e16fc3c99755f18f2003e51de17c45ad9c9e9**签名部分  
 **01**SIGHASH_ALL指令  
