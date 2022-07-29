@@ -1,0 +1,11 @@
+本实验的主要内容为实现SM3算法基础上的PoC，通过用户端和服务器端的交互进行账户安全性的验证。  
+部分代码实现如下图所展示，分为两个部分进行运行，用户端提供key和value，服务器端计算数据集和hab，交付给用户端进行验证。  
+此为用户端代码，这里设置用户端ip为本机ip地址，端口为1000，用户名和密码分别为201900和004644。  
+![image](https://github.com/MAR-523/-/blob/main/pic/PoC2.png)  
+此为服务器端代码  
+![image](https://github.com/MAR-523/-/blob/main/pic/PoC2.png)  
+通过运行可以看到成功达到了实验的效果，完成了交互目的。  
+此为用户端输出结果  
+![image](https://github.com/MAR-523/-/blob/main/pic/PoC.png)  
+此为服务器端输出结果  
+![image](https://github.com/MAR-523/-/blob/main/pic/PoC1.png)
